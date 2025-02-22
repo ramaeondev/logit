@@ -3,11 +3,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    #2196F3 0%,   // Blue shade from Azure Blue theme
-    #009688 100%  // Teal shade from Material theme
-  );
+  background: linear-gradient(135deg, #2196F3 0%, #009688 100%);
 }
 
 .login-form {
@@ -19,55 +15,37 @@
   background: white;
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-
-  mat-form-field {
-    margin-bottom: 1.5rem;
-
-    .mat-form-field-outline-start,
-    .mat-form-field-outline-gap,
-    .mat-form-field-outline-end {
-      border-width: 2px !important;
-    }
-  }
-
-  button[type="submit"] {
-    margin-top: 1rem;
-    padding: 12px;
-    font-size: 1.1rem;
-    border-radius: 8px;
-    background-color: #1976D2; // Primary button color from Azure Blue theme
-    color: white;
-    border: none;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #1565C0; // Darker shade on hover
-    }
-  }
-
-  @media (max-width: 600px) {
-    width: 90%;
-    margin: 1rem;
-  }
+  text-align: center;
 }
 
 .login-header {
-  margin-bottom: 2rem !important;
-
-  h1 {
-    color: #0D47A1; // Darker shade of blue from Azure Blue theme
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-
-  p {
-    color: rgba(0, 0, 0, 0.6);
-    margin: 0;
-  }
+  margin-bottom: 1rem;
 }
 
-.error-message {
-  color: #D32F2F; // Red from Material theme for error messages
+.app-logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 0.5rem;
+}
+
+.app-name {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #1976D2;
+}
+
+mat-form-field {
+  width: 100%;
   margin-bottom: 1rem;
-  font-weight: 500;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 12px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+}
+
+.text-center {
+  margin-top: 1rem;
 }

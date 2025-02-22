@@ -1,19 +1,39 @@
-<form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <mat-form-field appearance="outline">
-      <mat-label>Name</mat-label>
-      <input matInput formControlName="name" required>
-    </mat-form-field>
-    
-    <mat-form-field appearance="outline">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email" type="email" required>
-    </mat-form-field>
-    
-    <mat-form-field appearance="outline">
-      <mat-label>Password</mat-label>
-      <input matInput formControlName="password" type="password" required>
-    </mat-form-field>
-    
-    <button mat-raised-button color="primary" type="submit">Register</button>
-  </form>
+   <mat-card class="login-form">
+    <div class="login-headeßßßr text-center">
+      <app-logo></app-logo>
+      <h1 class="app-name">Logit</h1>
   
+      <h2>Signup</h2>
+    </div>
+  
+    <form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" required>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" required>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password" required>
+        <button mat-icon-button matSuffix (click)="togglePassword()" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword()"class="password-toggle-button">
+          <mat-icon>{{hidePassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-hint>Minimum of 6 characters and must meet our password guidelines</mat-hint>
+      </mat-form-field>
+
+      <mat-checkbox formControlName="terms" required>
+        I agree to the <a href="#">terms and conditions</a>
+      </mat-checkbox>
+      
+      <button mat-raised-button color="primary" type="submit">Register</button>
+    </form>
+  
+    <div class="text-center mt-2">
+      <p>Already have an account? <a mat-button color="accent"  [routerLink]="['/login']">Login</a></p>
+    </div>
+  </mat-card>

@@ -1,7 +1,58 @@
-.register-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    max-width: 300px;
-    margin: auto;
-  }
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #2196F3 0%, #009688 100%);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.login-header {
+  margin-bottom: 1rem;
+}
+
+.app-logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 0.5rem;
+}
+
+.app-name {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #1976D2;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 12px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+}
+
+.text-center {
+  margin-top: 1rem;
+}
+
+.password-toggle-button {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-90%);
+}
