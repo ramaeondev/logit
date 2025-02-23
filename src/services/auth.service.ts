@@ -37,4 +37,18 @@ export class AuthService {
   confirmEmail(token: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/confirm-email?token=${token}`);
   }
+
+  forgotPassword(email: string): Observable<StandardResponse<{email: string}>> {
+    return this.http.post<StandardResponse<{email: string}>>(
+      `${this.baseUrl}/reset-password/request`,
+      { email }
+    );
+  }
+
+  resetPassword(token: string, new_password: string): Observable<StandardResponse<{email: string}>> {
+    return this.http.post<StandardResponse<{email: string}>>(
+      `${this.baseUrl}/reset-password`,
+      { token, new_password }
+    );
+  }
 }

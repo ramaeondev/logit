@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal, WritableSignal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -28,7 +28,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class LoginComponent {
 
   loginForm: FormGroup;
-  private readonly destroyRef = inject(DestroyRef)
+  private readonly destroyRef = inject(DestroyRef);
+  hidePassword:WritableSignal<boolean> = signal<boolean>(true);
   
   constructor(public fb: FormBuilder, private readonly authService: AuthService, public router: Router, private readonly toastr: ToastrService, private readonly spinner: NgxSpinnerService) {
     this.loginForm = this.fb.group({
@@ -69,4 +70,9 @@ export class LoginComponent {
 
     }
   }
+  
+  togglePassword() {
+    this.hidePassword.update((value) => !value);
+  }
+
 }

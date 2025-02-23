@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ToastrService } from 'ngx-toastr';
 import { UserRegistration } from '../models/user-registration.model';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-registration',
@@ -29,19 +30,21 @@ export class RegistrationComponent {
   registerForm: FormGroup;
   hidePassword: WritableSignal<boolean> = signal<boolean>(true);
   private readonly destroyRef = inject(DestroyRef)
-  
-  constructor(public fb: FormBuilder, private readonly authService: AuthService, public router: Router, private readonly toastr: ToastrService) {
+  passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+  constructor(public fb: FormBuilder, private readonly authService: AuthService, public router: Router, private readonly spinner: NgxSpinnerService, private readonly toastr: ToastrService) {
     this.registerForm = this.fb.group({
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.pattern(this.passwordRegex)]],
       terms: [false, [Validators.requiredTrue]]
     });
   }
 
   onSubmit() {
     if (this.registerForm.valid) {
+      this.spinner.show();
       const user: UserRegistration = {
         first_name: this.registerForm.get('firstName')?.value,
         last_name: this.registerForm.get('lastName')?.value,
@@ -56,10 +59,13 @@ export class RegistrationComponent {
             this.toastr.success(res.messages[0], 'Success', { timeOut: 2000 });
           } else {
             console.log(res.errors[0]);
+            this.toastr.error(res.errors[0], 'Error', { timeOut: 2000 });
           }
+          this.spinner.hide();
         },
         error: (err) => {
           console.log(err);
+          this.spinner.hide();
         }
       });
     }

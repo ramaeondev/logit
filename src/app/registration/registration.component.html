@@ -25,10 +25,16 @@
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
         <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password" required>
-        <button mat-icon-button matSuffix (click)="togglePassword()" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword()"class="password-toggle-button">
+        <button mat-icon-button matSuffix (click)="togglePassword()" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword()"
+        class="password-toggle-button" type="button">
           <mat-icon>{{hidePassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
-        <mat-hint>Minimum of 6 characters and must meet our password guidelines</mat-hint>
+        @if(registerForm.controls['password'].hasError('required')){
+          <mat-error>Password is required</mat-error>
+        }
+        @if (registerForm.controls['password'].hasError('pattern') ){
+          <mat-error>Password must contain at least 8 characters, including uppercase, lowercase, number, and special character.</mat-error>
+        }
       </mat-form-field>
 
       <mat-checkbox formControlName="terms" required>
