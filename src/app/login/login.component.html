@@ -22,7 +22,7 @@
       <mat-error *ngIf="loginForm.get('password')?.invalid">Password is required</mat-error>
     </mat-form-field>
     
-    <button mat-raised-button color="primary" type="submit" class="full-width">
+    <button mat-raised-button color="primary" type="submit" class="full-width" [disabled]="loginForm.invalid">
       Login
     </button>
   </form>

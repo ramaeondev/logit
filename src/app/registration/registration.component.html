@@ -8,8 +8,13 @@
   
     <form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="outline">
-        <mat-label>Name</mat-label>
-        <input matInput formControlName="name" required>
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName" required>
       </mat-form-field>
       
       <mat-form-field appearance="outline">
@@ -30,7 +35,7 @@
         I agree to the <a href="#">terms and conditions</a>
       </mat-checkbox>
       
-      <button mat-raised-button color="primary" type="submit">Register</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!registerForm.valid">Register</button>
     </form>
   
     <div class="text-center mt-2">

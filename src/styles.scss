@@ -1,5 +1,6 @@
 // Import the prebuilt theme (already included in angular.json)
 @import '@angular/material/prebuilt-themes/azure-blue.css';
+@import '../node_modules/ngx-toastr/toastr.css';
 
 // Global styles
 html, body { 
