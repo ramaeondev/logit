@@ -6,8 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
@@ -32,20 +31,14 @@
     "@angular-devkit/build-angular": "^19.0.6",
     "@angular/cli": "^19.0.6",
     "@angular/compiler-cli": "^19.0.0",
-    "@commitlint/cli": "^19.7.1",
-    "@commitlint/config-conventional": "^19.7.1",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
     "@types/jasmine": "~5.1.0",
     "conventional-changelog-cli": "^5.0.0",
-    "husky": "^9.1.7",
     "jasmine-core": "~5.4.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "semantic-release": "^24.2.3",
     "typescript": "~5.6.2"
   }
 }
