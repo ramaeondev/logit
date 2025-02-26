@@ -21,16 +21,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-      
-      - name: Generate CHANGELOG
-        run: npm run changelog
-
-      - name: Commit and push CHANGELOG
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: update CHANGELOG.md [skip ci]"
-          file_pattern: CHANGELOG.md
-          branch: master
           
       - name: Build Angular app
         run: npm run build --prod
