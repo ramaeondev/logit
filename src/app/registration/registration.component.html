@@ -1,5 +1,5 @@
    <mat-card class="login-form">
-    <div class="login-headeßßßr text-center">
+    <div class="login-header text-center">
       <app-logo></app-logo>
       <h1 class="app-name">Logit</h1>
   
@@ -38,7 +38,7 @@
       </mat-form-field>
 
       <mat-checkbox formControlName="terms" required>
-        I agree to the <a href="#">terms and conditions</a>
+        I agree to the <a href="/end-user-agreement" target="_blank">terms and conditions</a> and <a href="/privacy-statement" target="_blank">privacy policy</a>
       </mat-checkbox>
       
       <button mat-raised-button color="primary" type="submit" [disabled]="!registerForm.valid">Register</button>
