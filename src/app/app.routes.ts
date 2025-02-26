@@ -17,6 +17,19 @@ export const routes: Routes = [
     {   path: 'dashboard',
         loadComponent: () => import('./home/home.component').then(m => m.HomeComponent)
     },
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
-
+    {   path: 'privacy-statement',
+        loadComponent: () => import('./privacy-statement/privacy-statement.component').then(m => m.PrivacyStatementComponent)
+    },
+    {   path: 'end-user-agreement',
+        loadComponent: () => import('./end-user-agreement/end-user-agreement.component').then(m => m.EndUserAgreementComponent)
+    },
+    { 
+        path: '404',
+        loadComponent: () => import('./pages/not-found/not-found.component').then(m => m.NotFoundComponent)
+      },
+      {
+        path: '**',
+        redirectTo: '/404'
+      },
+    { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];

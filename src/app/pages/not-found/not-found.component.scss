@@ -1,0 +1,48 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #2196F3 0%, #009688 100%);
+    padding: 2rem;
+  }
+  
+  .error-content {
+    text-align: center;
+    max-width: 600px;
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .error-icon {
+    margin-bottom: 1.5rem;
+    animation: bounce 1.5s infinite;
+  
+    svg {
+      filter: drop-shadow(0 2px 4px rgba(231, 76, 60, 0.3));
+    }
+  }
+  
+  .error-title {
+    color: #e74c3c;
+    margin-bottom: 1rem;
+    font-size: 2.5rem;
+  }
+  
+  .error-message {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .error-suggestion {
+    color: #888;
+    margin-bottom: 2rem;
+  }
+  
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
