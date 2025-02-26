@@ -1,0 +1,23 @@
+.home-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f4f6f8;
+
+  .main-content {
+    display: grid;
+    grid-template-columns: 50% 20% 30%; // Dividing the page into 3 sections
+    height: calc(100vh - 60px); // Assuming header takes 60px height
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .calendar-section,
+  .all-notes-section,
+  .write-notes-section {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+}
