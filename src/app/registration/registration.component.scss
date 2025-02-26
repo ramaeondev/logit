@@ -31,21 +31,13 @@
   color: #1976D2;
 }
 
-mat-form-field {
-  width: 100%;
-  margin-bottom: 1rem;
-}
-
 button {
-  margin-top: 1rem;
   padding: 12px;
   font-size: 1.1rem;
   border-radius: 8px;
 }
 
 .password-toggle-button {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-90%);
+  margin: 0;
+  padding: 0;
 }
