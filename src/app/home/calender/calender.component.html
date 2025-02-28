@@ -8,6 +8,7 @@
       *ngFor="let day of daysInMonth" 
       class="calendar-day" 
       [class.today]="isToday(day.date)" 
+      [class.selected]="isSelected(day.date)" 
       (click)="selectDate(day.date)"
     >
       <span class="date-number">{{ day.date | date: 'd' }}</span>

@@ -18,6 +18,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class CalenderComponent implements OnInit {
 
   currentMonth: string = '';
+  selectedDate: Date | null = null;
   daysInMonth: { date: Date; eventTypes: { type: string; count: number }[] }[] = [];
   
   @Output() dateSelected = new EventEmitter<Date>();
@@ -53,6 +54,8 @@ export class CalenderComponent implements OnInit {
   }
 
   selectDate(day: Date) {
+    console.log(day);
+    this.selectedDate = day;
     this.dateSelected.emit(day);
   }
 
@@ -60,6 +63,10 @@ export class CalenderComponent implements OnInit {
     return isToday(date);
   }
 
+  isSelected(date: Date): boolean {
+    return this.selectedDate ? format(this.selectedDate, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd') : false;
+  }
+  
   getAllNotes() {
     let today = new Date();
     let currentMonth = today.getMonth() + 1;
