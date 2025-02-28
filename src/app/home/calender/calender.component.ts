@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, inject, Inject, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { startOfMonth, endOfMonth, eachDayOfInterval, format, isToday } from 'date-fns';
+import { NotesService } from '../../../services/notes.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
 @Component({
@@ -13,7 +15,7 @@ import { startOfMonth, endOfMonth, eachDayOfInterval, format, isToday } from 'da
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CalenderComponent {
+export class CalenderComponent implements OnInit {
 
   currentMonth: string = '';
   daysInMonth: { date: Date; eventTypes: { type: string; count: number }[] }[] = [];
@@ -27,9 +29,13 @@ export class CalenderComponent {
     '2025-02-15': [{ type: 'personal', count: 5 }],
     '2025-02-26': [{ type: 'work', count: 4 }, { type: 'meeting', count: 2 }]
   };
+  private readonly destroyRef = inject(DestroyRef)
+  
+  constructor( private readonly notesService: NotesService) { }
 
   ngOnInit() {
     this.generateMonthView(new Date());
+    this.getAllNotes();
   }
 
   generateMonthView(date: Date) {
@@ -54,4 +60,12 @@ export class CalenderComponent {
     return isToday(date);
   }
 
+  getAllNotes() {
+    let today = new Date();
+    let currentMonth = today.getMonth() + 1;
+    let currentYear = today.getFullYear();
+    this.notesService.getAllNotes(currentMonth,currentYear).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((res) => {
+      console.log(res);
+    })
+  }
 }

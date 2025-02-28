@@ -51,8 +51,8 @@ export class LoginComponent {
                   this.router.navigate(['/dashboard']);
                   this.toastr.success(res.messages[0], 'Success', { timeOut: 2000 });
                   let data: UserProfile = res.data as UserProfile;
-                  localStorage.setItem('access_token', data.access_token);
-                  localStorage.setItem('refresh_token', data?.refresh_token);
+                  localStorage.setItem('access_token', res?.access_token);
+                  localStorage.setItem('refresh_token', res?.refresh_token);
                   localStorage.setItem('user_profile', JSON.stringify(data.user));
                   this.loginForm.reset();
                 } else {
