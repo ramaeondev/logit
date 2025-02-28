@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
-import { StandardResponse } from '../app/models/standard.model';
-import { LoginResponse, UserProfile } from '../app/models/user-profile.model';
-import { UserCredentials } from '../app/models/user-credentials.model';
-import { UserRegistration } from '../app/models/user-registration.model';
 import { CreateNoteRequest } from '../app/models/notes.model';
 @Injectable({
   providedIn: 'root',
