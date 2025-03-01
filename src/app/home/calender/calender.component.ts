@@ -5,6 +5,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { startOfMonth, endOfMonth, eachDayOfInterval, format, isToday } from 'date-fns';
 import { NotesService } from '../../../services/notes.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NoteStateService } from '../../../services/notes-state.service';
 
 
 @Component({
@@ -31,6 +32,8 @@ export class CalenderComponent implements OnInit {
     '2025-02-26': [{ type: 'work', count: 4 }, { type: 'meeting', count: 2 }]
   };
   private readonly destroyRef = inject(DestroyRef)
+  private noteStateService = inject(NoteStateService);
+
   
   constructor( private readonly notesService: NotesService) { }
 
@@ -57,6 +60,7 @@ export class CalenderComponent implements OnInit {
     console.log(day);
     this.selectedDate = day;
     this.dateSelected.emit(day);
+    this.noteStateService.setSelectedDate(day);
   }
 
   isToday(date: Date): boolean {
