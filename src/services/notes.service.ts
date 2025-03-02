@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
-import { CreateNoteRequest } from '../app/models/notes.model';
+import { CreateNoteRequest, Note } from '../app/models/notes.model';
 import { StandardResponse } from '../app/models/standard.model';
 @Injectable({
   providedIn: 'root',
@@ -23,7 +23,7 @@ export class NotesService {
     return this.http.post<any>(`${this.baseUrl}/notes/get-all-notes-count`, {month: month, year: year});  
   }
 
-  loadNotesSelectedDate(date: string): Observable<StandardResponse<any>>  {
-    return this.http.get<StandardResponse<any>>(`${this.baseUrl}/notes/get-all-notes?date=${date}`);
+  loadNotesSelectedDate(date: string): Observable<StandardResponse<Note[]>>  {
+    return this.http.get<StandardResponse<Note[]>>(`${this.baseUrl}/notes/get-all-notes?date=${date}`);
   }
 }

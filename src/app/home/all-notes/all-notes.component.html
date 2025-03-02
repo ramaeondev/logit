@@ -1,7 +1,11 @@
-<div class="all-notes-container">
-    <h3>📜 All Notes</h3>
-    <ul>
-      <!-- <li *ngFor="let note of notes">{{ note }}</li> -->
-    </ul>
-  </div>
-  
+<div cdkDropList class="all-notes-container mat-elevation-z3 p-4 rounded-lg" (cdkDropListDropped)="drop($event)">
+  <h3 class="mat-title">📜 All Notes</h3>
+  <ul class="mat-list">
+    @for (note of allNotes(); track note.id) {
+    <mat-card cdkDrag class="note-card">
+      <mat-card-title>{{ note.title }}</mat-card-title>
+      <mat-card-content>{{ note.content }}</mat-card-content>
+    </mat-card>
+    }
+  </ul>
+</div>

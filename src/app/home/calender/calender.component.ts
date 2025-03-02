@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { v4 as uuidv4 } from 'uuid';
 import {MatDatepicker, MatDatepickerModule} from '@angular/material/datepicker';
 import { MatOptionModule } from '@angular/material/core';
+import { Note } from '../../models/notes.model';
 
 @Component({
   selector: 'app-calender',
@@ -39,6 +40,7 @@ export class CalenderComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef)
   private noteStateService = inject(NoteStateService);
   private notesService = inject(NotesService);
+  selectedMonth: string = format(new Date(), 'yyyy-MM');
 
   constructor(private cdr: ChangeDetectorRef) {}
 
@@ -77,8 +79,9 @@ export class CalenderComponent implements OnInit {
     console.log(targetDate);
     this.notesService.loadNotesSelectedDate(targetDate)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((res) => {
+      .subscribe((res: {data : Note[]}) => {
         console.log(res);
+        this.noteStateService.dateChange$.next(res.data);
       });
   }
 
@@ -128,7 +131,6 @@ export class CalenderComponent implements OnInit {
     this.loadMonthlyCounts();
   }
 
-  selectedMonth: string = format(new Date(), 'yyyy-MM');
 
   setMonthAndYear(event: Date, datepicker: MatDatepicker<Date>) {
     console.log("Month selected:", event);
