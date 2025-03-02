@@ -1,10 +1,39 @@
 <div class="calendar-container">
   <div class="calendar-header">
-    {{ currentMonth }}
+    <button class="icon-button" (click)="prevYear()">
+      <lucide-icon [img]="ChevronsLeft" class="my-icon"></lucide-icon>
+    </button>
+    <button class="icon-button" (click)="prevMonth()">
+      <lucide-icon [img]="ChevronLeft" class="my-icon"></lucide-icon>
+    </button>
+
+    <span class="month-title">{{ currentMonth }}</span>
+
+    <button class="icon-button" (click)="nextMonth()">
+      <lucide-icon [img]="ChevronRight" class="my-icon"></lucide-icon>
+    </button>
+    <button class="icon-button" (click)="nextYear()">
+      <lucide-icon [img]="ChevronsRight" class="my-icon"></lucide-icon>
+    </button>
+
+    <!-- <mat-form-field>
+      <mat-label>Month and Year</mat-label>
+      <input matInput [matDatepicker]="dp" [formControl]="date">
+      <mat-hint>MM/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+      <mat-datepicker #dp
+                      startView="multi-year"
+                      (monthSelected)="setMonthAndYear($event, dp)"
+                      panelClass="example-month-picker">
+      </mat-datepicker>
+    </mat-form-field> -->
+    
+    
   </div>
 
+
   <div class="calendar-grid">
-    @for (day of daysInMonth(); track day.date) {
+    @for (day of daysInMonth(); track day.id) {
     <div class="calendar-day" [class.today]="isToday(day.date)" [class.selected]="isSelected(day.date)"
       (click)="selectDate(day.date)">
       <span class="date-number">{{ day.date | date: 'd' }}</span>
@@ -13,7 +42,7 @@
       <div class="event-counts">
         @for (event of day.eventTypes; track event.category_id){
         <div class="event-type" [ngClass]="event.color">
-       {{ event.name }} --- {{ event.color }} --- {{ event.count }}
+          {{ event.name }} --- {{ event.color }} --- {{ event.count }}
         </div>
         }
       </div>

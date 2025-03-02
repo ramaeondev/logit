@@ -17,5 +17,6 @@ export type NotesApiResponse = Record<string, NoteCategory[]>;
 
 export interface DayData {
   date: Date;
+  id: string;
   eventTypes: NoteCategory[];
 }

@@ -1,22 +1,35 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, EventEmitter, inject, Inject, OnInit, Output, signal, WritableSignal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { startOfMonth, endOfMonth, eachDayOfInterval, format, isToday } from 'date-fns';
 import { NotesService } from '../../../services/notes.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NoteStateService } from '../../../services/notes-state.service';
 import { DayData, NotesApiResponse } from '../../models/notes.model';
+import { LucideAngularModule, ChevronLeft, ChevronsLeft, ChevronRight, ChevronsRight} from 'lucide-angular';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { v4 as uuidv4 } from 'uuid';
+import {MatDatepicker, MatDatepickerModule} from '@angular/material/datepicker';
+import { MatOptionModule } from '@angular/material/core';
+
 @Component({
   selector: 'app-calender',
-  imports: [CommonModule, BsDatepickerModule, FormsModule],
+  imports: [CommonModule, BsDatepickerModule, FormsModule, LucideAngularModule, MatFormFieldModule,
+    MatInputModule, ReactiveFormsModule, MatDatepickerModule, MatOptionModule  ],
   templateUrl: './calender.component.html',
   styleUrl: './calender.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalenderComponent implements OnInit {
-  
+  readonly ChevronLeft = ChevronLeft;
+  readonly ChevronsLeft = ChevronsLeft;
+  readonly ChevronRight = ChevronRight;
+  readonly ChevronsRight = ChevronsRight;
+  date = new FormControl(new Date());
+
   currentDate: Date = new Date();
   currentMonth: string = '';
   selectedDate: Date | null = null;
@@ -50,13 +63,12 @@ export class CalenderComponent implements OnInit {
   }
 
   loadMonthlyCounts() {
-    const today = new Date();
-    const currentMonth = today.getMonth() + 1;
-    const currentYear = today.getFullYear();
-    this.notesService.getMonthlyNotesCounts(currentMonth, currentYear)
+    const month = this.currentDate.getMonth() + 1;
+    const year = this.currentDate.getFullYear();
+    this.notesService.getMonthlyNotesCounts(month, year)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((res: { data: NotesApiResponse }) => {
-        this.generateMonthWithEvents(today, res.data);
+        this.generateMonthWithEvents(this.currentDate, res.data);
       });
   }
 
@@ -82,6 +94,7 @@ export class CalenderComponent implements OnInit {
       const key = format(day, 'yyyy-MM-dd');
       return {
         date: day,
+        id: uuidv4(),
         eventTypes: noteData[key]?.map(category => ({
           name: category.name,
           count: category.count,
@@ -95,4 +108,38 @@ export class CalenderComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
+  prevMonth() {
+    this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() - 1, 1);
+    this.loadMonthlyCounts();
+  }
+  
+  nextMonth() {
+    this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 1);
+    this.loadMonthlyCounts();
+  }
+  
+  prevYear() {
+    this.currentDate = new Date(this.currentDate.getFullYear() - 1, this.currentDate.getMonth(), 1);
+    this.loadMonthlyCounts();
+  }
+  
+  nextYear() {
+    this.currentDate = new Date(this.currentDate.getFullYear() + 1, this.currentDate.getMonth(), 1);
+    this.loadMonthlyCounts();
+  }
+
+  selectedMonth: string = format(new Date(), 'yyyy-MM');
+
+  setMonthAndYear(event: Date, datepicker: MatDatepicker<Date>) {
+    console.log("Month selected:", event);
+
+    const year = event.getFullYear();
+    const month = event.getMonth() + 1; // Months are zero-based
+
+    this.currentDate = new Date(year, month - 1, 1);
+    this.generateMonthWithEvents(this.currentDate);
+
+    datepicker.close(); // Close the date picker after selection
+  }
+  
 }
