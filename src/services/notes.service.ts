@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { CreateNoteRequest } from '../app/models/notes.model';
+import { StandardResponse } from '../app/models/standard.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -17,5 +18,12 @@ export class NotesService {
 
   getAllNotes(month:number, year: number):Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/notes/get-all-notes`, {month: month, year: year});  
+  }
+  getMonthlyNotesCounts(month:number, year: number):Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/notes/get-all-notes-count`, {month: month, year: year});  
+  }
+
+  loadNotesSelectedDate(date: string): Observable<StandardResponse<any>>  {
+    return this.http.get<StandardResponse<any>>(`${this.baseUrl}/notes/get-all-notes?date=${date}`);
   }
 }
