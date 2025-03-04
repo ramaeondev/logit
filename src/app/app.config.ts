@@ -7,6 +7,7 @@ import { provideToastr } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,6 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     provideToastr(),
     provideAnimations(),
+    provideNativeDateAdapter(),
     NgxSpinnerModule,
     provideRouter(routes)],
     

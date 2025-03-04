@@ -29,7 +29,8 @@
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "node_modules/tinymce/",
+                "output": "assets/tinymce/"
               }
             ],
             "styles": [
@@ -37,7 +38,9 @@
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/ngx-spinner/animations/ball-scale-multiple.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/tinymce/tinymce.min.js"
+            ]
           },
           "configurations": {
             "production": {

@@ -1,71 +1,147 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, inject, Inject, OnInit, Output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, EventEmitter, inject, Inject, OnInit, Output, signal, WritableSignal } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { startOfMonth, endOfMonth, eachDayOfInterval, format, isToday } from 'date-fns';
 import { NotesService } from '../../../services/notes.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
+import { NoteStateService } from '../../../services/notes-state.service';
+import { DayData, NotesApiResponse } from '../../models/notes.model';
+import { LucideAngularModule, ChevronLeft, ChevronsLeft, ChevronRight, ChevronsRight} from 'lucide-angular';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { v4 as uuidv4 } from 'uuid';
+import {MatDatepicker, MatDatepickerModule} from '@angular/material/datepicker';
+import { MatOptionModule } from '@angular/material/core';
+import { Note } from '../../models/notes.model';
 
 @Component({
   selector: 'app-calender',
-  imports: [CommonModule,BsDatepickerModule, FormsModule],
+  imports: [CommonModule, BsDatepickerModule, FormsModule, LucideAngularModule, MatFormFieldModule,
+    MatInputModule, ReactiveFormsModule, MatDatepickerModule, MatOptionModule  ],
   templateUrl: './calender.component.html',
   styleUrl: './calender.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalenderComponent implements OnInit {
+  readonly ChevronLeft = ChevronLeft;
+  readonly ChevronsLeft = ChevronsLeft;
+  readonly ChevronRight = ChevronRight;
+  readonly ChevronsRight = ChevronsRight;
+  date = new FormControl(new Date());
 
+  currentDate: Date = new Date();
   currentMonth: string = '';
-  daysInMonth: { date: Date; eventTypes: { type: string; count: number }[] }[] = [];
-  
-  @Output() dateSelected = new EventEmitter<Date>();
+  selectedDate: Date | null = null;
+  daysInMonth: WritableSignal<DayData[]> = signal<DayData[]>([]);
 
-  // Sample event data (Replace with actual data from API)
-  eventData: { [key: string]: { type: string; count: number }[] } = {
-    '2025-02-01': [{ type: 'work', count: 2 }, { type: 'personal', count: 1 }],
-    '2025-02-10': [{ type: 'meeting', count: 3 }],
-    '2025-02-15': [{ type: 'personal', count: 5 }],
-    '2025-02-26': [{ type: 'work', count: 4 }, { type: 'meeting', count: 2 }]
-  };
+  @Output() dateSelected = new EventEmitter<Date>();
   private readonly destroyRef = inject(DestroyRef)
-  
-  constructor( private readonly notesService: NotesService) { }
+  private noteStateService = inject(NoteStateService);
+  private notesService = inject(NotesService);
+  selectedMonth: string = format(new Date(), 'yyyy-MM');
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.generateMonthView(new Date());
-    this.getAllNotes();
-  }
-
-  generateMonthView(date: Date) {
-    this.currentMonth = format(date, 'MMMM yyyy');
-    
-    const days = eachDayOfInterval({ 
-      start: startOfMonth(date), 
-      end: endOfMonth(date) 
-    });
-
-    this.daysInMonth = days.map(day => ({
-      date: day,
-      eventTypes: this.eventData[format(day, 'yyyy-MM-dd')] || []
-    }));
+    this.loadMonthlyCounts();
+    this.loadNotes(new Date());
   }
 
   selectDate(day: Date) {
+    this.selectedDate = day;
     this.dateSelected.emit(day);
+    this.noteStateService.setSelectedDate(day);
+    this.loadNotes(day);
   }
 
   isToday(date: Date): boolean {
     return isToday(date);
   }
 
-  getAllNotes() {
-    let today = new Date();
-    let currentMonth = today.getMonth() + 1;
-    let currentYear = today.getFullYear();
-    this.notesService.getAllNotes(currentMonth,currentYear).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((res) => {
-      console.log(res);
-    })
+  isSelected(date: Date): boolean {
+    return this.selectedDate ? format(this.selectedDate, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd') : false;
   }
+
+  loadMonthlyCounts() {
+    const month = this.currentDate.getMonth() + 1;
+    const year = this.currentDate.getFullYear();
+    this.notesService.getMonthlyNotesCounts(month, year)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((res: { data: NotesApiResponse }) => {
+        this.generateMonthWithEvents(this.currentDate, res.data);
+      });
+  }
+
+  loadNotes(selectedDate: Date) {
+    let targetDate: string = format(selectedDate, 'yyyy-MM-dd');
+    console.log(targetDate);
+    this.notesService.loadNotesSelectedDate(targetDate)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((res: {data : Note[]}) => {
+        console.log(res);
+        this.noteStateService.dateChange$.next(res.data);
+      });
+  }
+
+  generateMonthWithEvents(date: Date, noteData: NotesApiResponse = {}) {
+    this.currentMonth = format(date, 'MMMM yyyy');
+  
+    const days = eachDayOfInterval({
+      start: startOfMonth(date),
+      end: endOfMonth(date)
+    });
+  
+    const updatedDays = days.map(day => {
+      const key = format(day, 'yyyy-MM-dd');
+      return {
+        date: day,
+        id: uuidv4(),
+        eventTypes: noteData[key]?.map(category => ({
+          name: category.name,
+          count: category.count,
+          color: category.color,
+          category_id: category.category_id,
+          numeric_id: category.numeric_id
+        })) || []
+      };
+    });
+    this.daysInMonth.set(updatedDays);
+    this.cdr.detectChanges();
+  }
+
+  prevMonth() {
+    this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() - 1, 1);
+    this.loadMonthlyCounts();
+  }
+  
+  nextMonth() {
+    this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 1);
+    this.loadMonthlyCounts();
+  }
+  
+  prevYear() {
+    this.currentDate = new Date(this.currentDate.getFullYear() - 1, this.currentDate.getMonth(), 1);
+    this.loadMonthlyCounts();
+  }
+  
+  nextYear() {
+    this.currentDate = new Date(this.currentDate.getFullYear() + 1, this.currentDate.getMonth(), 1);
+    this.loadMonthlyCounts();
+  }
+
+
+  setMonthAndYear(event: Date, datepicker: MatDatepicker<Date>) {
+    console.log("Month selected:", event);
+
+    const year = event.getFullYear();
+    const month = event.getMonth() + 1; // Months are zero-based
+
+    this.currentDate = new Date(year, month - 1, 1);
+    this.generateMonthWithEvents(this.currentDate);
+
+    datepicker.close(); // Close the date picker after selection
+  }
+  
 }

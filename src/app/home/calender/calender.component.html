@@ -1,22 +1,45 @@
 <div class="calendar-container">
   <div class="calendar-header">
-    {{ currentMonth }}
+    <button class="icon-button" (click)="prevYear()">
+      <lucide-icon [img]="ChevronsLeft" class="my-icon"></lucide-icon>
+    </button>
+    <button class="icon-button" (click)="prevMonth()">
+      <lucide-icon [img]="ChevronLeft" class="my-icon"></lucide-icon>
+    </button>
+
+    <span class="month-title">{{ currentMonth }}</span>
+
+    <button class="icon-button" (click)="nextMonth()">
+      <lucide-icon [img]="ChevronRight" class="my-icon"></lucide-icon>
+    </button>
+    <button class="icon-button" (click)="nextYear()">
+      <lucide-icon [img]="ChevronsRight" class="my-icon"></lucide-icon>
+    </button>
   </div>
+
 
   <div class="calendar-grid">
-    <div 
-      *ngFor="let day of daysInMonth" 
-      class="calendar-day" 
-      [class.today]="isToday(day.date)" 
-      (click)="selectDate(day.date)"
-    >
+    @for (day of daysInMonth(); track day.id) {
+    <div class="calendar-day" [class.today]="isToday(day.date)" [class.selected]="isSelected(day.date)"
+      (click)="selectDate(day.date)">
       <span class="date-number">{{ day.date | date: 'd' }}</span>
 
-      <div class="event-counts" *ngIf="day.eventTypes.length > 0">
-        <div *ngFor="let event of day.eventTypes" class="event-type" [ngClass]="event.type">
-          {{ event.count }} {{ event.type }}
-        </div>
+      @if(day.eventTypes.length > 0) {
+      <div class="notes-indicator">
+        <div class="category-colors">
+          @for (event of day.eventTypes; track event.category_id; let idx = $index) {
+          @if(idx < 5) { 
+            <div class="category-dot" [style.backgroundColor]="event.color">
+              <span class="note-count">{{ event.count }}</span>
+            </div>
+          }
+        }
+        @if(day.eventTypes.length > 5) {
+          <div class="more-indicator">+{{ day.eventTypes.length - 5 }} More</div>
+        }
       </div>
     </div>
+    }
   </div>
+  }
 </div>
