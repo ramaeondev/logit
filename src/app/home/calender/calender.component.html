@@ -25,27 +25,21 @@
       <span class="date-number">{{ day.date | date: 'd' }}</span>
 
       @if(day.eventTypes.length > 0) {
-      <div class="event-counts">
-        @for (event of day.eventTypes; track event.category_id){
-        <div class="event-type" [ngClass]="event.color">
-          {{ event.name }} --- {{ event.color }} --- {{ event.count }}
-        </div>
+      <div class="notes-indicator">
+        <div class="category-colors">
+          @for (event of day.eventTypes; track event.category_id; let idx = $index) {
+          @if(idx < 5) { 
+            <div class="category-dot" [style.backgroundColor]="event.color">
+              <span class="note-count">{{ event.count }}</span>
+            </div>
+          }
+        }
+        @if(day.eventTypes.length > 5) {
+          <div class="more-indicator">+{{ day.eventTypes.length - 5 }} More</div>
         }
       </div>
-      }
     </div>
     }
   </div>
+  }
 </div>
-
-<!-- <mat-form-field>
-      <mat-label>Month and Year</mat-label>
-      <input matInput [matDatepicker]="dp" [formControl]="date">
-      <mat-hint>MM/YYYY</mat-hint>
-      <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
-      <mat-datepicker #dp
-                      startView="multi-year"
-                      (monthSelected)="setMonthAndYear($event, dp)"
-                      panelClass="example-month-picker">
-      </mat-datepicker>
-    </mat-form-field> -->
