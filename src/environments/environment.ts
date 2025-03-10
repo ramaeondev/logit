@@ -1,5 +1,5 @@
 export const environment = {
-    appName: 'Logit',
+    appName: 'Cloudnotes',
     production: false,
     apiBaseUrlV1: 'http://localhost:8000/v1'
   };

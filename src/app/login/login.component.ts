@@ -14,6 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../services/auth.service';
 import { UserProfile } from '../models/user-profile.model';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -30,12 +31,14 @@ export class LoginComponent {
   loginForm: FormGroup;
   private readonly destroyRef = inject(DestroyRef);
   hidePassword:WritableSignal<boolean> = signal<boolean>(true);
-  
+  appName: WritableSignal<string> = signal<string>('');
+
   constructor(public fb: FormBuilder, private readonly authService: AuthService, public router: Router, private readonly toastr: ToastrService, private readonly spinner: NgxSpinnerService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
+    this.appName.set(environment.appName)
   }
 
   onSubmit() {

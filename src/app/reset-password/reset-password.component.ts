@@ -12,6 +12,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-reset-password',
@@ -31,13 +32,14 @@ export class ResetPasswordComponent implements OnInit{
     hidePassword: WritableSignal<boolean> = signal<boolean>(true);
     hideConfirmPassword: WritableSignal<boolean> = signal<boolean>(true);
     resetToken: WritableSignal<string> = signal<string>('');
-
+    appName: WritableSignal<string> = signal<string>('');
 
     constructor(public fb: FormBuilder, private readonly authService: AuthService, public route: ActivatedRoute,
       public router: Router, private readonly toastr: ToastrService, private readonly spinner: NgxSpinnerService) {
         this.resetForm = this.fb.group({
           password: ['', [Validators.required, Validators.pattern(this.passwordRegex)]],
-          confirmPassword: ['',Validators.required]}, { validators: this.passwordMatchValidator });        
+          confirmPassword: ['',Validators.required]}, { validators: this.passwordMatchValidator });
+          this.appName.set(environment.appName);
       }
 
       passwordMatchValidator(group: FormGroup) {
