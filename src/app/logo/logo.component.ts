@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, signal, WritableSignal } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-logo',
@@ -9,7 +10,13 @@ import { Component, Input } from '@angular/core';
   standalone: true
 })
 export class LogoComponent {
-  
+
+
+  appName: WritableSignal<string> = signal<string>('');
   @Input() size: 'small' | 'medium' | 'large' = 'medium';
+
+  constructor(){
+    this.appName.set(environment.appName);
+  }
 
 }

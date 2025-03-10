@@ -12,6 +12,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-forget-password',
@@ -29,11 +30,13 @@ export class ForgetPasswordComponent {
   checkemail:WritableSignal<boolean> = signal<boolean>(false);
   checkEmailMessage:WritableSignal<string> = signal<string>('');
   private readonly destroyRef = inject(DestroyRef)
-  
+  appName: WritableSignal<string> = signal<string>('');
+
   constructor(public fb: FormBuilder, private readonly authService: AuthService, public router: Router, private readonly toastr: ToastrService, private readonly spinner: NgxSpinnerService) {
     this.resetForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
     });
+  this.appName.set(environment.appName);    
   }
 
   onSubmit() {

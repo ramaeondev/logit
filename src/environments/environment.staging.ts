@@ -1,6 +1,6 @@
 export const environment = {
-    appName: 'Logit',
+    appName: 'Cloudnotes',
     production: false,
-    apiBaseUrlV1: 'http://localhost:8000/v1'
+    apiBaseUrlV1: 'https://dev-api.cloudnotes.click/v1'
   };
   

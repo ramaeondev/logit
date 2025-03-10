@@ -14,6 +14,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ToastrService } from 'ngx-toastr';
 import { UserRegistration } from '../models/user-registration.model';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-registration',
@@ -31,6 +32,7 @@ export class RegistrationComponent {
   hidePassword: WritableSignal<boolean> = signal<boolean>(true);
   private readonly destroyRef = inject(DestroyRef)
   passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  appName: WritableSignal<string> = signal<string>('');
 
   constructor(public fb: FormBuilder, private readonly authService: AuthService, public router: Router, private readonly spinner: NgxSpinnerService, private readonly toastr: ToastrService) {
     this.registerForm = this.fb.group({
@@ -40,6 +42,7 @@ export class RegistrationComponent {
       password: ['', [Validators.required, Validators.pattern(this.passwordRegex)]],
       terms: [false, [Validators.requiredTrue]]
     });
+    this.appName.set(environment.appName);
   }
 
   onSubmit() {
