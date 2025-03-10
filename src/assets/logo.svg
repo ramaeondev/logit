@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 95 118.75" x="0px" y="0px">
+<svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 95 95" x="0px" y="0px">
   <defs>
     <style>
       .cls-1 {
         fill-rule: evenodd;
-        fill: #1976D2; /* Apply the color #51a2ff */
+        fill: #1976D2;
       }
     </style>
   </defs>
