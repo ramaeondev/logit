@@ -9,7 +9,7 @@ RUN npm run build --prod
 # Step 2: Serve with Nginx
 FROM nginx:1.25-alpine
 
-# Copy Nginx config
+# Copy Nginx config from repo
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Remove default Nginx static files and copy Angular dist output
