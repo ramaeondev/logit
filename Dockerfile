@@ -14,6 +14,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 # Remove default Nginx static files and copy Angular dist output
 RUN rm -rf /usr/share/nginx/html/*
+# Make sure this matches your Angular output structure
 COPY --from=build /app/dist/logit /usr/share/nginx/html
 
 # Expose port 80
