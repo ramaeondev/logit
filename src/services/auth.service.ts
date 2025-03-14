@@ -6,13 +6,14 @@ import { StandardResponse } from '../app/models/standard.model';
 import { LoginResponse, UserProfile } from '../app/models/user-profile.model';
 import { UserCredentials } from '../app/models/user-credentials.model';
 import { UserRegistration } from '../app/models/user-registration.model';
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private readonly baseUrl = environment.apiBaseUrlV1;
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient, private readonly router: Router) {}
 
   register(user: UserRegistration): Observable<StandardResponse<{ user_id: string }>> {
     return this.http.post<StandardResponse<{ user_id: string }>>(
@@ -50,5 +51,10 @@ export class AuthService {
       `${this.baseUrl}/auth/reset-password`,
       { token, new_password }
     );
+  }
+
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['/login']);
   }
 }

@@ -18,7 +18,7 @@ import { Note } from '../../models/notes.model';
 @Component({
   selector: 'app-calender',
   imports: [CommonModule, BsDatepickerModule, FormsModule, LucideAngularModule, MatFormFieldModule,
-    MatInputModule, ReactiveFormsModule, MatDatepickerModule, MatOptionModule  ],
+    MatInputModule, ReactiveFormsModule, MatDatepickerModule, MatOptionModule ],
   templateUrl: './calender.component.html',
   styleUrl: './calender.component.scss',
   standalone: true,
