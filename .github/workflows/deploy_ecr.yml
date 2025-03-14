@@ -1,0 +1,48 @@
+name: Deploy Angular to EC2 with Docker
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate with AWS ECR
+        run: |
+          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+
+      - name: Build Docker Image
+        run: |
+          docker build -t cloudnotes-frontend .
+
+      - name: Tag & Push to ECR
+        run: |
+          docker tag cloudnotes-frontend:latest public.ecr.aws/r5p8n8t0/cloudnotes/frontend:latest
+          docker push public.ecr.aws/r5p8n8t0/cloudnotes/frontend:latest
+
+      - name: Deploy on EC2
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ec2-user
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          echo "$EC2_SSH_KEY" > private_key.pem
+          chmod 600 private_key.pem
+
+          ssh -o StrictHostKeyChecking=no -i private_key.pem $EC2_USER@$EC2_HOST << 'EOF'
+            aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+            docker pull public.ecr.aws/r5p8n8t0/cloudnotes/frontend:latest
+            docker stop cloudnotes-frontend || true
+            docker rm cloudnotes-frontend || true
+            docker run -d --name cloudnotes-frontend -p 80:80 public.ecr.aws/r5p8n8t0/cloudnotes/frontend:latest
+          EOF
+
+      - name: Clean up SSH Key
+        run: rm -f private_key.pem
