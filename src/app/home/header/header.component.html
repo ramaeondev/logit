@@ -1,9 +1,15 @@
 <header class="header">
   <div class="header-left">
-      <app-logo size="small"></app-logo> <!-- Reusing the logo component -->
+      <app-logo size="small" style="padding-bottom: 1rem;"></app-logo>
+      <h1 class="app-name">{{appName()}}</h1>
   </div>
 
   <div class="header-right">
-      <!-- <img src="assets/profile-icon.svg" alt="Profile" class="profile-icon"> -->
-  </div>
+    <button mat-icon-button [matMenuTriggerFor]="profileMenu">
+      <lucide-icon [img]="User" class="profile-icon"></lucide-icon> 
+    </button>
+    <mat-menu #profileMenu="matMenu" class="custom-menu">
+      <button mat-menu-item (click)="logout()">Logout</button>
+    </mat-menu>
+    </div>
 </header>
